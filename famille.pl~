@@ -1,0 +1,32 @@
+% Faits supplémentaires
+homme(alex).
+homme(henri).
+femme(claire).
+femme(anne).
+parent(alex, marie).  % Alex est le père de Marie
+parent(claire, marie).  % Claire est la mère de Marie
+parent(henri, sophie).  % Henri est le père de Sophie
+parent(anne, sophie).   % Anne est la mère de Sophie
+parent(marc, alex).    % Marc est le père d'Alex
+parent(jacques, claire).  % Jacques est le père de Claire
+
+
+% Règles
+père(X, Y) :- homme(X), parent(X, Y).
+mère(X, Y) :- femme(X), parent(X, Y).
+grand_parent(X, Y) :- parent(X, Z), parent(Z, Y).
+% Règle pour les frères et sœurs
+frere_soeur(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+
+ma_liste([pierre, marie, paul]).
+[Tête | Queue] = [pierre, marie, paul].
+longueur([], 0).  % La longueur d'une liste vide est 0
+longueur([_ | Queue], N) :- longueur(Queue, N1), N is N1 + 1.
+appartient(X, [X | _]).  % L'élément X est dans la tête de la liste
+appartient(X, [_ | Queue]) :- appartient(X, Queue).  % Sinon, cherche dans la queue
+
+oncle(X, Y) :- homme(X), frere_soeur(X, Z), parent(Z, Y).
+tante(X, Y) :- femme(X), frere_soeur(X, Z), parent(Z, Y).
+
+frere_soeur(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+cousin(X, Y) :- parent(P1, X), parent(P2, Y), frere_soeur(P1, P2).
